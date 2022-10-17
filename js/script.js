@@ -61,15 +61,34 @@ function addPagination(list) {
    }
 
    link_list.innerHTML = list_items;
+
+   if(total_pages > 0) {
+      // Highlight first pagination link
+      document.querySelector('.link-list li:first-child button').classList.add("active");
+   }
 }
 
+
+/**
+ * addSearchbar
+ * 
+ * Adds searchbar element to the page
+ */
+function addSearchbar() {
+   const search_bar = `<label for="search" class="student-search">
+      <span>Search by name</span>
+      <input id="search" placeholder="Search by name...">
+      <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
+    </label>`;
+
+    let header = document.querySelector('header');
+    header.insertAdjacentHTML('beforeend', search_bar);
+}
 
 // Call functions
 showPage(data, 1);
 addPagination(data);
-
-// Highlight first pagination link
-document.querySelector('.link-list li:first-child button').classList.add("active");
+addSearchbar();
 
 // Handle page navigation
 document.querySelector('.link-list').addEventListener('click', (e) => {
@@ -81,3 +100,33 @@ document.querySelector('.link-list').addEventListener('click', (e) => {
       button.classList.add('active');
    }
 });
+
+let search = (e) => {
+   let search_query = document.querySelector('.student-search input').value.toLowerCase();
+
+   let new_list = [];
+   for (let i = 0; i < data.length; i++) {
+      let student = data[i];
+
+      // Check if student name matches search query
+      if(student.name.first.toLowerCase().includes(search_query) || student.name.last.toLowerCase().includes(search_query)) {
+         new_list.push(student);
+      }
+   }
+
+   // CAN BE IMPROVED ****
+   if(new_list.length > 0) {
+      if(document.querySelector('.no-results')) {
+         document.querySelector('.no-results').remove();
+      }
+   } else {
+      document.querySelector('header').insertAdjacentHTML('afterend', '<h3 class="no-results">No results found</h3>');
+   }
+
+   showPage(new_list, 1);
+   addPagination(new_list);
+};
+
+// Handle search functionality
+document.querySelector('.student-search input').addEventListener('keyup', search);
+document.querySelector('.student-search button').addEventListener('click', search);
