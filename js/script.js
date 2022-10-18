@@ -167,7 +167,9 @@ let search = (e) => {
          document.querySelector('.no-results').remove();
       }
    } else {
-      document.querySelector('header').insertAdjacentHTML('afterend', '<h3 class="no-results">No results found</h3>');
+      if(!document.querySelector('.no-results')) {
+         document.querySelector('header').insertAdjacentHTML('afterend', '<h3 class="no-results">No results found</h3>');
+      }
    }
 
    showPage(current_list, 1);
