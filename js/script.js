@@ -78,9 +78,9 @@ function addPagination(list) {
    if(total_pages > 0) {
       // Highlight first pagination link
       document.querySelector('.link-list li:first-child button').classList.add("active");
-
-      addResultDetails();
    }
+
+   addResultDetails();
 }
 
 /**
@@ -89,6 +89,11 @@ function addPagination(list) {
  * Adds a summary of the results displayed on the page
  */
 function addResultDetails() {
+   if(current_list.length === 0) {
+      document.querySelector('.result-details').innerHTML = "";
+      return;
+   }
+
    let start_index = getStartIndex();
    let end_index = getEndIndex();
    let total_entries = current_list.length;
